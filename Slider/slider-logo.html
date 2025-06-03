@@ -1,0 +1,127 @@
+<style>
+    .ss-slider-container {
+      padding: 20px;
+      overflow: hidden;
+      position: relative;
+      max-width: 100%;
+      margin: auto;
+    }
+
+    .ss-slider-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .ss-slide {
+      flex: 0 0 33.3333%;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+
+    .ss-slide img {
+      width: 100%;
+      height: auto;
+      max-height: 150px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: white;
+      padding: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .ss-dots {
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .ss-dot {
+      height: 10px;
+      width: 10px;
+      margin: 0 5px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .ss-dot.ss-active {
+      background-color: #fff;
+    }
+  </style>
+
+
+  <div class="ss-slider-container">
+    <div class="ss-slider-wrapper" id="ssSlider">
+      <div class="ss-slide"><a href="https://tangkar.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/tangkar.png" alt="Tangkar" /></a></div>
+      <div class="ss-slide"><a href="https://infoloker.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/infoloker.png" alt="Info Loker" /></a></div>
+      <div class="ss-slide"><a href="https://edukcapil.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/edukcapil.png" alt="edukcapil" /></a></div>
+      <div class="ss-slide"><a href="https://hargapasar.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/harga_pasar.png" alt="harga_pasar" /></a></div>
+      <div class="ss-slide"><a href="https://bedmonitoring.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/bed_monitoring.png" alt="bed_monitoring" /></a></div>
+      <div class="ss-slide"><a href="https://bkpsdm.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/bkpsdm_karawang.png" alt="bkpsdm_karawang" /></a></div>
+      <div class="ss-slide"><a href="https://infosadaradmindukkarawang.id/" target="_blank"><img src="https://raw.githubusercontent.com/YusupMC/GPR-Karawang/main/insan-karawang.jpg" alt="insan_karawang" /></a></div>
+      <div class="ss-slide"><a href="https://sigaptangkar.karawangkab.go.id/login" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/sigap_karawang.png" alt="sigap_karawang" /></a></div>
+      <div class="ss-slide"><a href="https://jdih.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/jdihn.png" alt="jdihn" /></a></div>
+      <div class="ss-slide"><a href="https://kliping.karawangkab.go.id/" target="_blank"><img src="https://karawangkab.go.id/sites/default/files/kliping_karawang.png" alt="kliping_karawang" /></a></div>
+    </div>
+
+    <div class="ss-dots" id="ssDots"></div>
+  </div>
+
+  <script>
+    const ssSlider = document.getElementById('ssSlider');
+    const ssSlides = document.querySelectorAll('.ss-slide');
+    const ssItemWidth = ssSlides[0].offsetWidth;
+
+    const ssDotsContainer = document.getElementById('ssDots');
+    const ssTotalSlides = ssSlides.length;
+    const ssVisible = 3;
+    const ssMaxIndex = ssTotalSlides - ssVisible;
+
+    let ssIndex = 0;
+    let ssInterval;
+
+    // Buat dot otomatis
+    for (let i = 0; i <= ssMaxIndex; i++) {
+      const dot = document.createElement('span');
+      dot.classList.add('ss-dot');
+      if (i === 0) dot.classList.add('ss-active');
+      dot.dataset.index = i;
+      ssDotsContainer.appendChild(dot);
+    }
+
+    const ssDots = document.querySelectorAll('.ss-dot');
+
+    function updateDots(index) {
+      ssDots.forEach(dot => dot.classList.remove('ss-active'));
+      if (ssDots[index]) ssDots[index].classList.add('ss-active');
+    }
+
+    function moveSlider(toIndex) {
+      ssIndex = toIndex;
+      if (ssIndex > ssMaxIndex) ssIndex = 0;
+      ssSlider.style.transform = `translateX(-${ssIndex * ssItemWidth}px)`;
+      updateDots(ssIndex);
+    }
+
+    function autoSlide() {
+      ssIndex = (ssIndex + 1) > ssMaxIndex ? 0 : ssIndex + 1;
+      moveSlider(ssIndex);
+    }
+
+    // Dot diklik
+    ssDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        moveSlider(parseInt(dot.dataset.index));
+        resetAutoSlide();
+      });
+    });
+
+    function resetAutoSlide() {
+      clearInterval(ssInterval);
+      ssInterval = setInterval(autoSlide, 5000);
+    }
+
+    // Start otomatis
+    ssInterval = setInterval(autoSlide, 5000);
+  </script>
